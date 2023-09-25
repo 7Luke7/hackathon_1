@@ -48,7 +48,7 @@ const page = React.memo(() => {
             }
             const request = await axios({
                 method: "POST",
-                url: `${process.env.URL}/sign-up`,
+                url: "https://hckth1.onrender.com/api/v1//sign-up",
                 headers: {
                     'Content-Type': 'application/json'
                 },
