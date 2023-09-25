@@ -5,7 +5,7 @@ import Header from '../main_page_comps/Header'
 import axios from 'axios'
 import Link from 'next/link'
 
-const page = () => {
+const Page = () => {
 
   const [notifications, setNotifications] = useState([])
   const [time, setTime] = useState("")
@@ -143,4 +143,4 @@ const page = () => {
   )
 }
 
-export default page
+export default Page

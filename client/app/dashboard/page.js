@@ -6,7 +6,7 @@ import { BsPerson } from 'react-icons/bs'
 import { useRouter } from 'next/navigation'
 import axios from 'axios'
 
-const page = () => {
+const Page = () => {
     const [user, setUser] = useState([])
 
     const token = localStorage.getItem("accessToken")
@@ -31,7 +31,7 @@ const page = () => {
     
     useEffect(() => {
         get_user_data()
-    }, [])
+    }, [get_user_data])
 
     const handle_account_delete = async () => {
       try {
@@ -43,7 +43,7 @@ const page = () => {
     })
 
     localStorage.removeItem("accessToken")
-    useRouter().replace("/login")
+    useRouter.replace("/login")
     } catch (error) {
         console.log(error)
     }
@@ -144,4 +144,4 @@ const page = () => {
   </div>
 }
 
-export default page
+export default Page

@@ -4,7 +4,7 @@ import Header from '../../main_page_comps/Header'
 import { BsPerson } from 'react-icons/bs'
 import axios from 'axios'
 
-const page = ({params}) => {
+const Page = ({params}) => {
     const [user, setUser] = useState([])
 
     const get_user_data = async () => {
@@ -110,4 +110,4 @@ const page = ({params}) => {
   </div>
 }
 
-export default page
+export default Page
