@@ -1,7 +1,6 @@
 "use client"
 
 import React, {useState} from 'react'
-import {Mooli} from "next/font/google"
 import Link from 'next/link'
 import Image from "next/image" 
 import Banner from "../../public/undraw_chat_re_re1u.webp"
