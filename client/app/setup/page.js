@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import Select from "react-select";
 import languages from "../../languages.json";
 import hobbies from "../../hobbies.json";
-import { Inclusive_Sans } from "next/font/google";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import {
@@ -13,8 +12,6 @@ import {
   DialogBody,
   DialogFooter,
 } from "@material-tailwind/react";
-
-const incusive_sans = Inclusive_Sans({ subsets: ["latin"], weight: "400" });
 
 const page = () => {
   const [user, setUser] = useState({
@@ -138,7 +135,7 @@ const page = () => {
     get_user_data();
   }, []);
   return (
-    <div className={`${incusive_sans.className} `}>
+    <div>
       <div className="text-center mt-20">
         <h1 className="text-3xl text-gray-800 font-bold">
           Complete forms for full website access.
