@@ -13,7 +13,11 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
+<<<<<<< HEAD
 const Page = () => {
+=======
+const page = () => {
+>>>>>>> 6b05bb61450fa591a0f67acfdd3efe3d84d50f54
   const [user, setUser] = useState({
     username: "",
     gender: "",

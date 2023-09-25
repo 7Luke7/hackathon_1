@@ -7,7 +7,11 @@ import Banner from "../../public/undraw_chat_re_re1u.webp"
 import axios from "axios"
 import { useRouter } from 'next/navigation';
 
+<<<<<<< HEAD
 const Page = React.memo(() => {
+=======
+const page = React.memo(() => {
+>>>>>>> 6b05bb61450fa591a0f67acfdd3efe3d84d50f54
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [date, setDate] = useState("")
@@ -15,7 +19,7 @@ const Page = React.memo(() => {
     const [email, setEmail] = useState("")
     const [error, setError] = useState("")
 
-      const Router = useRouter() 
+      const Router = useRouter()
       const submit_handler = async (e) => {
             try {
               e.preventDefault()
@@ -45,7 +49,7 @@ const Page = React.memo(() => {
             }
             const request = await axios({
                 method: "POST",
-                url: `${process.env.URL}/sign-up`,
+                url: "https://hckth1.onrender.com/api/v1//sign-up",
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -187,4 +191,8 @@ const Page = React.memo(() => {
       )
 })
 
+<<<<<<< HEAD
 export default Page
+=======
+export default page
+>>>>>>> 6b05bb61450fa591a0f67acfdd3efe3d84d50f54

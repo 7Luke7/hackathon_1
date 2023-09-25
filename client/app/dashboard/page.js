@@ -11,7 +11,7 @@ const Page = () => {
 
     const token = localStorage.getItem("accessToken")
     if (!token) {
-        useRouter().replace("/login")
+        useRouter.replace("/login")
     }
  
     const get_user_data = async () => {
@@ -31,7 +31,7 @@ const Page = () => {
     
     useEffect(() => {
         get_user_data()
-    }, [get_user_data])
+    }, [])
 
     const handle_account_delete = async () => {
       try {
@@ -99,8 +99,8 @@ const Page = () => {
         </div>
         <div className="p-6">
         <div className='flex flex-wrap gap-5 bg-green'>
-          {user.interests?.map((hobbie) => {
-            return <p className='p-2 font-medium rounded-md' style={{color: "rgb(85,94,63)", backgroundColor: "rgb(222,247,236)"}}>{hobbie}</p>
+          {user.interests?.map((hobbie, i) => {
+            return <p key={i} className='p-2 font-medium rounded-md' style={{color: "rgb(85,94,63)", backgroundColor: "rgb(222,247,236)"}}>{hobbie}</p>
           })}
           </div>
         </div>
@@ -117,8 +117,8 @@ const Page = () => {
         </div>
         <div className="p-6">
         <div className='flex flex-wrap gap-5 bg-green'>
-          {user.languagesLearning?.map((lang) => {
-            return <div className='p-2 font-medium rounded-md' style={{color: "rgb(31,79,192)", backgroundColor: "rgb(219,234,254)"}}>
+          {user.languagesLearning?.map((lang, i) => {
+            return <div key={i} className='p-2 font-medium rounded-md' style={{color: "rgb(31,79,192)", backgroundColor: "rgb(219,234,254)"}}>
               <p>{lang.language}</p>
               <hr className='border-t-1 border-green-800'/>
               <p>{lang.proficiency}</p>
