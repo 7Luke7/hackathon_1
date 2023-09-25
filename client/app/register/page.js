@@ -8,8 +8,6 @@ import Banner from "../../public/undraw_chat_re_re1u.webp"
 import axios from "axios"
 import { useRouter } from 'next/navigation';
 
-const mooli = Mooli({ subsets: ['latin'], weight: "400" })
-
 const page = React.memo(() => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
@@ -66,7 +64,7 @@ const page = React.memo(() => {
         }
         
       return (
-        <div className={mooli.className}>
+        <div>
             <div className='flex h-screen justify-start items-center'>
             <div className="flex min-h-full flex-1 flex-col w-6/12 justify-center px-6 py-12 lg:px-8">
             <div className="sm:mx-auto sm:w-full sm:max-w-sm">
