@@ -12,22 +12,14 @@ const pipeline_handler = (res, data, user) => {
     const userInterests = user.interests;
     let pipeline = []
     if (Object.keys(data).length === 0) {
-      return res.json({
+      return res.status(400).json({
         message: "You must provide language."
       })
     }  else {
       if (user.age >= 18) {
-        user.languagesLearning.forEach((language, i) => {
-          if (language.proficiency === "Beginner" && language.language === data.language) {
-            pipeline.push(
-                {
-                  $addFields: {
-                    commonLanguages: {
-                      $setIntersection: ["$languagesLearning.language", data.language]
-                      // commonLanguages is equal to ["Russian"]
-                    },
-                  },
-                },
+        user.languagesLearning.forEach((language) => {
+          if (language.proficiency === "Beginner") {
+            pipeline.push(  
                 {
                   $addFields: {
                     commonInterests: {
@@ -44,12 +36,25 @@ const pipeline_handler = (res, data, user) => {
                     },
                   },
                 },
+
+                {
+                  $addFields: {
+                    commonLanguages: {
+                      $setIntersection: [
+                        "$languagesLearning.language", [data.language]
+                      ]
+                    }
+                  }
+                },
+                
                 {
                   $match: {
                     $expr: {
-                      $gte: [ { $size: "$commonInterests" }, 1 ]
+                      $and: [
+                        { $gte: [ { $size: { $ifNull: ["$commonInterests", []] } }, 1 ] },
+        { $gte: [ { $size: { $ifNull: ["$commonLanguages", []] } }, 1 ] }
+                      ]
                     },
-                    commonLanguages: { $gte: 1 },
                     "languagesLearning.proficiency": {
                       $in: ["Beginner", "Intermediate", "Fluent"],
                     },
@@ -60,16 +65,10 @@ const pipeline_handler = (res, data, user) => {
                   $limit: 10,
                 },
               )
-
-            } else if (language.proficiency === "Intermediate"  && language.language === data.language) {
+            } else if (language.proficiency === "Intermediate") {
             pipeline.push(
-              {
-                $addFields: {
-                  commonLanguages: {
-                    $setIntersection: ["$languagesLearning.language", data.language]
-                  },
-                },
-              },
+              
+             
               {
                 $addFields: {
                   commonInterests: {
@@ -86,12 +85,24 @@ const pipeline_handler = (res, data, user) => {
                   },
                 },
               },
+
+              {
+                $addFields: {
+                  commonLanguages: {
+                    $setIntersection: [
+                      "$languagesLearning.language", [data.language]                    ]
+                  }
+                }
+              },
+
               {
                 $match: {
                   $expr: {
-                    $gte: [ { $size: "$commonInterests" }, 1 ]
-                  },
-                  commonLanguages: { $gte: 1 },
+                    $and: [
+                      { $gte: [ { $size: { $ifNull: ["$commonInterests", []] } }, 1 ] },
+        { $gte: [ { $size: { $ifNull: ["$commonLanguages", []] } }, 1 ] }
+                    ]
+                  },            
                   "languagesLearning.proficiency": {
                     $in: ["Intermediate"],
                   },
@@ -102,16 +113,9 @@ const pipeline_handler = (res, data, user) => {
                 $limit: 10,
               })
 
-            } else if (language.proficiency === "Fluent"  && language.language === data.language) {
-              console.log("fluent")
+            } else if (language.proficiency === "Fluent") {
               pipeline.push(
-              {
-                $addFields: {
-                  commonLanguages: {
-                    $setIntersection: ["$languagesLearning.language", data.language]
-                  },
-                },
-              },
+                
               {
                 $addFields: {
                   commonInterests: {
@@ -128,12 +132,24 @@ const pipeline_handler = (res, data, user) => {
                   },
                 },
               },
+
+              {
+                $addFields: {
+                  commonLanguages: {
+                    $setIntersection: [
+                      "$languagesLearning.language", [data.language]                    ]
+                  }
+                }
+              },
+
               {
                 $match: {
                   $expr: {
-                    $gte: [ { $size: "$commonInterests" }, 1 ]
+                    $and: [
+                      { $gte: [ { $size: { $ifNull: ["$commonInterests", []] } }, 1 ] },
+        { $gte: [ { $size: { $ifNull: ["$commonLanguages", []] } }, 1 ] }
+                    ]
                   },
-                  commonLanguages: { $gte: 1 },
                   "languagesLearning.proficiency": {
                     $in: ["Beginner", "Intermediate", "Fluent"],
                   },
@@ -149,6 +165,155 @@ const pipeline_handler = (res, data, user) => {
   }  else {
   // Match with users who are under 18
   // Perform matching logic for users under 18
+  user.languagesLearning.forEach((language) => {
+    if (language.proficiency === "Beginner") {
+      pipeline.push(
+        
+          {
+            $addFields: {
+              commonInterests: {
+                $cond: {
+                  if: { $isArray: "$interests" },
+                  then: {
+                    $setIntersection: [
+                      "$interests",
+                      userInterests
+                    ],
+                  },
+                  else: "NA",
+                },
+              },
+            },
+          },
+
+          {
+            $addFields: {
+              commonLanguages: {
+                $setIntersection: [
+                  "$languagesLearning.language", [data.language]
+                ]
+              }
+            }
+          },
+
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  { $gte: [ { $size: { $ifNull: ["$commonInterests", []] } }, 1 ] },
+        { $gte: [ { $size: { $ifNull: ["$commonLanguages", []] } }, 1 ] }
+                ]
+              },
+              "languagesLearning.proficiency": {
+                $in: ["Beginner", "Intermediate", "Fluent"],
+              },
+              age: { $lte: 18 },
+            },
+          },
+          {
+            $limit: 10,
+          },
+        )
+
+      } else if (language.proficiency === "Intermediate") {
+      pipeline.push(
+    
+       
+        {
+          $addFields: {
+            commonInterests: {
+              $cond: {
+                if: { $isArray: "$interests" },
+                then: {
+                  $setIntersection: [
+                    "$interests",
+                    userInterests
+                  ],
+                },
+                else: "NA",
+              },
+            },
+          },
+        },
+
+        {
+          $addFields: {
+            commonLanguages: {
+              $setIntersection: [
+                "$languagesLearning.language", [data.language]
+              ]
+            }
+          }
+        },
+
+        {
+          $match: {
+            $expr: {
+              $and: [
+                { $gte: [ { $size: { $ifNull: ["$commonInterests", []] } }, 1 ] },
+        { $gte: [ { $size: { $ifNull: ["$commonLanguages", []] } }, 1 ] }
+              ]
+            },             
+            "languagesLearning.proficiency": {
+              $in: ["Intermediate"],
+            },
+            age: { $lte: 18 },
+          },
+        },
+        {
+          $limit: 10,
+        })
+
+      } else if (language.proficiency === "Fluent") {
+        pipeline.push(
+        
+        {
+          $addFields: {
+            commonInterests: {
+              $cond: {
+                if: { $isArray: "$interests" },
+                then: {
+                  $setIntersection: [
+                    "$interests",
+                    userInterests
+                  ],
+                },
+                else: "NA",
+              },
+            },
+          },
+        },
+
+        {
+          $addFields: {
+            commonLanguages: {
+              $setIntersection: [
+                "$languagesLearning.language", [data.language]
+              ]
+            }
+          }
+        },
+
+        {
+          $match: {
+            $expr: {
+              $and: [
+                { $gte: [ { $size: { $ifNull: ["$commonInterests", []] } }, 1 ] },
+                { $gte: [ { $size: { $ifNull: ["$commonLanguages", []] } }, 1 ] }
+              ]
+            },
+            "languagesLearning.proficiency": {
+              $in: ["Beginner", "Intermediate", "Fluent"],
+            },
+            age: { $lte: 18 },
+          },
+        },
+        {
+          $limit: 10,
+        })
+
+  }
+  })
   }
     }
 

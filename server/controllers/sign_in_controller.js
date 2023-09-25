@@ -6,8 +6,8 @@ require("dotenv").config()
 const sign_in_controller = async (req, res, next) => {
     const user = await UserModel.findOne({"email": req.body.email})
     if (!user) {
-        return res.json({
-            message: "User is with provided email doesn't exist."
+        return res.status(404).json({
+            message: "Invalid email."
         })
     }
 
@@ -15,8 +15,8 @@ const sign_in_controller = async (req, res, next) => {
         if (err) throw Error("error occured while crytping.")
 
         if (!result) {
-            return res.json({
-                message: "Password doesn't match."
+            return res.status(401).json({
+                message: "Invalid Password."
             })
         }
 

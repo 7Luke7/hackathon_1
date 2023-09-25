@@ -6,7 +6,7 @@ const languageSchema = new mongoose.Schema({
 });
 
 const userSchema = new mongoose.Schema({
-  username: {type: String, required: true},
+  username: {type: String, unique: true, required: true},
   email: { type: String, unique: true, required: true },
   password: {type: String, required: true},
   nativeLanguage: String, 
@@ -24,8 +24,14 @@ userSchema.index(
    "learningLanguages.proficiency": 1 
   }
 )
+
 userSchema.index(
   { age: 1}
+)
+
+
+userSchema.index(
+  {email: 1}, {unique: true}
 )
 
 userSchema.index(
@@ -33,7 +39,8 @@ userSchema.index(
 )
 
 userSchema.index(
-  {username: 1}
+  {username: 1}, 
+  {unique: true}
 )
 
 const UserModel = mongoose.model('User', userSchema);

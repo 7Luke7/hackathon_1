@@ -8,14 +8,14 @@ const dashboard_controller = (req, res, next) => {
         const token = auth_headers.split(" ")[1]
 
         if (!token) {
-            return res.json({
+            return res.status(401).json({
                 message: "You are not authorized to access this page."
             })
         }
 
         jwt.verify(token, process.env.TOKEN_KEY, async (err, decoded) => {
             if (err) {
-                return res.json({
+                return res.status(401).json({
                     message: "You are not authorized to access this page."
                 })
             }

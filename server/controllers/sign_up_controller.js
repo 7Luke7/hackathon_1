@@ -29,7 +29,6 @@ const sign_up_controller = async (req, res, next) => {
         if (err) throw Error(err)
         bcrypt.hash(req.body.password, salt, (err, hash) => {
             if (err) throw Error(err)
-            const today = new Date();
             const calculateAge = (birthDate) => {
                 const today = new Date();
                 const birthDateParts = birthDate.split("-");
@@ -45,22 +44,17 @@ const sign_up_controller = async (req, res, next) => {
                   (today.getMonth() === birthMonth && today.getDate() < birthDay)
                 ) {
                   return age - 1;
-                }
+                } 
               
                 return age;
-              }
-
-              const capitalize = (gender) => {
-                const cap_gender = gender[0].toUpperCase() + gender.slice(1)
-                return cap_gender
               }
               
             const newUser = new UserModel({
                 username: req.body.username, 
                 password: hash,
                 email: req.body.email.toLowerCase(),
-                gender: capitalize(req.body.gender),
-                bornIn: calculateAge(req.body.bornIn)
+                gender: req.body.gender,
+                age: calculateAge(req.body.age)
             })
             
             newUser.save().then(() => {
