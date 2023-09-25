@@ -1,13 +1,11 @@
 "use client"
 
 import React, { useState } from 'react'
-import {Mooli} from "next/font/google"
 import Link from 'next/link'
 import Image from "next/image"
 import Banner from "../../public/undraw_chatting_re_j55r.webp"
 import axios from 'axios'
 import { useRouter } from 'next/navigation';
-const mooli = Mooli({ subsets: ['latin'], weight: "400" })
 
 const page = () => {
   const [email, setEmail] = useState("")
@@ -49,7 +47,7 @@ const page = () => {
     }
     
   return (
-    <div className={mooli.className}>
+    <div>
         <div className='flex h-screen justify-center items-center'>
         <div className="flex min-h-full w-6/12 flex-1 flex-col justify-center px-6 py-12 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-sm">
