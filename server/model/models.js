@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-
 const languageSchema = new mongoose.Schema({
   language: String,
   proficiency: String, // "Beginner", "Intermediate", "Fluent"

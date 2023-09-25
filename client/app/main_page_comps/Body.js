@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
+"use client"
+import React, { cloneElement, useState } from 'react'
 import languages from "../../languages.json";
 import Select from "react-select";
 import axios from 'axios';
+import DisplayUsers from './DisplayUsers';
 import { useRouter } from 'next/router';
 
 const Body = () => {
-    const token = localStorage.getItem("accessToken")
-    if(!token) {
-        useRouter().replace("/login")
-        return
-    }
     const [selectedLanguages, setSelectedLanguages] = useState([])
-    const languagesHandler = (e) => {3
+    const [error, setError] = useState("")
+    const [usersRetrieved, setUsersRetrieved] = useState(false)
+    
+    const languagesHandler = (e) => {
         const new_only_language_array = e.map((lang) => {
             return lang.value
         })
@@ -21,9 +21,10 @@ const Body = () => {
     const find_match_handler = async (e) => {
         try {
             e.preventDefault()
+            const token = localStorage.getItem("token")
             const request = await axios({
                 method: "POST", 
-                url: "http://localhost:5000/api/v1/pair_user",
+                url: `http://localhost:5000/api/v1/pair_user`,
                 data: JSON.stringify({language: selectedLanguages}),
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -32,9 +33,19 @@ const Body = () => {
             })
 
             console.log(request.data)
-            console.log(request)
+            localStorage.setItem("userArray", JSON.stringify(request.data))
+            setUsersRetrieved(true)
         } catch (error) {
             console.log(error)
+            if (error.response.status === 400) {
+                localStorage.removeItem("userArray")
+                setUsersRetrieved(true)
+                setError("")
+                setError(error.response.data.message)
+                setTimeout(() => {
+                    setError("")
+                }, 3000)
+            }
         }
     }
 
@@ -59,10 +70,16 @@ const Body = () => {
                 Find a Match
             </button>
         </form>
+        <span className="text-sm font-semibold text-red-600">{error}</span>
             
         </div>
-        <div className='border-2 border-slate-800 border-l-0 rounded-tr-md rounded-br-md w-6/12'>
-            
+        <div className='border-2 overflow-auto border-slate-800 border-l-0 rounded-tr-md rounded-br-md w-6/12'>
+            {cloneElement(
+                <DisplayUsers>
+                
+            </DisplayUsers>,
+            {usersRetrieved, setUsersRetrieved}
+            )}
         </div>
       </div>
     </div>

@@ -37,7 +37,7 @@ const page = () => {
     try {
       const token = localStorage.getItem("accessToken");
       const request = await axios.get(
-        "http://localhost:5000/api/v1/dashboard",
+        `${process.env.URL}/dashboard`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -82,7 +82,7 @@ const page = () => {
 
       const token = localStorage.getItem("accessToken")
       console.log(token)
-      const request = await axios.put("http://localhost:5000/api/v1/setup_profile", user, {
+      const request = await axios.put(`${process.env.URL}/setup_profile`, user, {
         headers: {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'

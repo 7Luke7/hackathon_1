@@ -7,7 +7,7 @@ const setup_profile = (req, res, next) => {
     const token = auth_headers.split(" ")[1]
     
     jwt.verify(token, process.env.TOKEN_KEY, async (err, decoded) => {
-            const result = await UserModel.updateOne({_id: decoded.id}, req.body)
+            const result = await UserModel.findByIdAndUpdate(decoded.id, req.body)
 
             const {password, ...rest} = result
             res.status(200).json(rest)

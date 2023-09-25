@@ -48,7 +48,7 @@ const page = React.memo(() => {
             }
             const request = await axios({
                 method: "POST",
-                url: "http://localhost:5000/api/v1/sign-up",
+                url: `${process.env.URL}/sign-up`,
                 headers: {
                     'Content-Type': 'application/json'
                 },
