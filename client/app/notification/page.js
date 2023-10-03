@@ -4,15 +4,26 @@ import { BsPerson } from 'react-icons/bs'
 import Header from '../main_page_comps/Header'
 import axios from 'axios'
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 
 const Page = () => {
 
   const [notifications, setNotifications] = useState([])
   const [time, setTime] = useState("")
+  const [loading, setLoading] = useState(false)
   const [reacted, setReacted] = useState(false)
-  const request_notifications = async () => {
-    const token = localStorage.getItem("accessToken")
+  
+  const Router = useRouter()
 
+  const token = localStorage.getItem("accessToken")
+
+  if (!token) {
+    Router.replace("/new_user")
+  } else {
+    setLoading(true)
+  }
+
+  const request_notifications = async () => {
     try {
       const request = await axios.get(`${process.env.URL}/get_connections`, {
         headers: {
@@ -63,9 +74,13 @@ const Page = () => {
   }, [notifications])
 
   useEffect(() => {
-    request_notifications()
-    setReacted(false)
-  }, [reacted])
+    if (loading) {
+      request_notifications()
+      setReacted(false)
+    } else {
+      return
+    }
+  }, [loading, reacted])
 
   const decline_connection = async (id) => {
     try {
@@ -103,8 +118,9 @@ const Page = () => {
 
 
 
-  return (
-    <div>
+  return <>
+    {
+      loading && <div>
       <Header></Header>
     <div className='bg-slate-200 m-auto w-2/6'>
     <div class="max-w-lg pt-10 mx-auto items-center min-h-screen">
@@ -140,7 +156,9 @@ const Page = () => {
 </div>
     </div>
     </div>
-  )
+  
+    }
+  </>
 }
 
 export default Page

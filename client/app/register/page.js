@@ -7,11 +7,7 @@ import Banner from "../../public/undraw_chat_re_re1u.webp"
 import axios from "axios"
 import { useRouter } from 'next/navigation';
 
-<<<<<<< HEAD
 const Page = React.memo(() => {
-=======
-const page = React.memo(() => {
->>>>>>> 6b05bb61450fa591a0f67acfdd3efe3d84d50f54
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [date, setDate] = useState("")
@@ -191,8 +187,4 @@ const page = React.memo(() => {
       )
 })
 
-<<<<<<< HEAD
 export default Page
-=======
-export default page
->>>>>>> 6b05bb61450fa591a0f67acfdd3efe3d84d50f54

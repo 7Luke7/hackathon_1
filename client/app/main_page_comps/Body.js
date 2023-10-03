@@ -1,42 +1,48 @@
 "use client"
-import React, { cloneElement, useState } from 'react'
+import React, { cloneElement, useEffect, useState } from 'react'
 import languages from "../../languages.json";
 import Select from "react-select";
 import axios from 'axios';
 import DisplayUsers from './DisplayUsers';
-import { useRouter } from 'next/router';
 
 const Body = () => {
     const [selectedLanguages, setSelectedLanguages] = useState([])
     const [error, setError] = useState("")
     const [usersRetrieved, setUsersRetrieved] = useState(false)
     
-    const languagesHandler = (e) => {
-        const new_only_language_array = e.map((lang) => {
-            return lang.value
-        })
-        setSelectedLanguages(new_only_language_array)
-    }
+    useEffect(() => {
+        const languages = localStorage.getItem("selectedLanguages")
+        if (languages) {
+            setSelectedLanguages(JSON.parse(languages))
+        } else {
+            return 
+        }
+    }, [])
 
+    const languagesHandler = (e) => {
+        setSelectedLanguages(e)
+        if (!e.length || e.length < JSON.parse(localStorage.getItem("selectedLanguages"))) {
+            localStorage.removeItem("selectedLanguages")
+        }
+    }
     const find_match_handler = async (e) => {
         try {
             e.preventDefault()
-            const token = localStorage.getItem("token")
+            const token = localStorage.getItem("accessToken")
             const request = await axios({
                 method: "POST", 
-                url: `http://localhost:5000/api/v1/pair_user`,
-                data: JSON.stringify({language: selectedLanguages}),
-                headers: {
+                url: `${process.env.URL}/pair_user`,
+                data: JSON.stringify({language: selectedLanguages.map((l) => l.value)}),
+                headers: {  
                     Authorization: `Bearer ${token}`,
                     "Content-Type": "application/json"
                 },
             })
 
-            console.log(request.data)
             localStorage.setItem("userArray", JSON.stringify(request.data))
+            localStorage.setItem("selectedLanguages", JSON.stringify(selectedLanguages))
             setUsersRetrieved(true)
         } catch (error) {
-            console.log(error)
             if (error.response.status === 400) {
                 localStorage.removeItem("userArray")
                 setUsersRetrieved(true)
@@ -63,6 +69,8 @@ const Body = () => {
               name="languages"
               onChange={languagesHandler}
               options={languages}
+              value={selectedLanguages}
+              dele
               className="basic-multi-select w-60 mb-8"
               classNamePrefix="select"
             />

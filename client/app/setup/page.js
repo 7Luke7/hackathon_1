@@ -13,11 +13,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react";
 
-<<<<<<< HEAD
 const Page = () => {
-=======
-const page = () => {
->>>>>>> 6b05bb61450fa591a0f67acfdd3efe3d84d50f54
   const [user, setUser] = useState({
     username: "",
     gender: "",
@@ -25,18 +21,28 @@ const page = () => {
     languagesLearning: [],
   });
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false)
   const [lang, setLang] = useState("")
   const [proficiency, setProficiency] = useState("")
-
-  const Router = useRouter();
-
   const [open, setOpen] = React.useState(false);
  
+  const Router = useRouter()
+  useEffect(() => {
+    const token = localStorage.getItem("accessToken")
+
+    if (!token) {
+      Router.replace("/new_user")
+    }   else {
+      setLoading(true)
+    }
+  }, [])
+  
   const handleOpen = () => setOpen(!open);
   
   const get_user_data = async () => {
+    const token = localStorage.getItem("accessToken")
+
     try {
-      const token = localStorage.getItem("accessToken");
       const request = await axios.get(
         `${process.env.URL}/dashboard`,
         {
@@ -82,7 +88,6 @@ const page = () => {
       }
 
       const token = localStorage.getItem("accessToken")
-      console.log(token)
       const request = await axios.put(`${process.env.URL}/setup_profile`, user, {
         headers: {
         Authorization: `Bearer ${token}`,
@@ -126,20 +131,21 @@ const page = () => {
   };
 
   useEffect(() => {
-    console.log(user)
-  }, [user])
-
-  useEffect(() => {
     setTimeout(() => {
       setError("")
     }, 5000)
   }, [user, error]);
 
   useEffect(() => {
-    get_user_data();
-  }, []);
+    if (loading) {
+      get_user_data();
+    } else {
+      return
+    }
+  }, [loading]);
   return (
-    <div>
+    <>
+      {loading && <div>
       <div className="text-center mt-20">
         <h1 className="text-3xl text-gray-800 font-bold">
           Complete forms for full website access.
@@ -274,30 +280,28 @@ const page = () => {
         </DialogFooter>
       </Dialog>
       <div className="w-64">
-      {user.languagesLearning.length > 0 ? <table className="w-64 text-sm text-left text-gray-500 dark:text-gray-400">
-        <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+      {user.languagesLearning.length > 0 ? <table className="w-64 flex flex-col text-sm text-left text-gray-500 dark:text-gray-400">
+        <thead className="text-xs flex justify-around uppercase bg-gray-700 text-gray-400">
             <tr>
                 <th scope="col" className="px-6 py-3">
                     Language
                 </th>
-                <th scope="col" className=" py-3">
+                <th scope="col" className="px-6 py-3">
                     Proficiency
                 </th>
             </tr>
         </thead>
-        <tbody>
-            <tr className="bg-white border-b dark:bg-gray-900 dark:border-gray-700">
-                {user.languagesLearning.map((l) => {
-                  return <div>
+        <tbody className="w-full border-b bg-gray-900 border-gray-700">
+                  {user.languagesLearning.map((l, i) => {
+                  return <tr key={i} className="flex justify-around">
                     <th scope="row" className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                     {l.language}
                 </th>
-                <td className="px-6 py-4">
+                <td className="px-6 text-left py-4">
                     {l.proficiency}
                 </td>
-                  </div>
+                  </tr>
                 })}
-            </tr>
             </tbody>
             </table> : ""}
       </div>
@@ -330,7 +334,8 @@ const page = () => {
           Submit
         </button>
       </form>
-    </div>
+    </div>}
+    </>
   );
 };
 

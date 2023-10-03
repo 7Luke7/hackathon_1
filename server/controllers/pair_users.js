@@ -23,9 +23,7 @@ const pair_user_handler = async (req, res, next) => {
             const user = await UserModel.findById(decoded.id)
             
             const pipeline = pipeline_handler(res, req.body, user)
-            console.log(pipeline)
             const result = await UserModel.aggregate(pipeline).exec();
-            console.log(result)
 
             if (result.length === 0) {
                 return res.status(400).json({

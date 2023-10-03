@@ -11,7 +11,6 @@ const DisplayUsers = ({usersRetrieved, setUsersRetrieved}) => {
         if (storedArray) {
             setUsers(JSON.parse(storedArray));
         }
-        console.log(usersRetrieved, users)
         setUsersRetrieved(false)
       }, [usersRetrieved]);
 
@@ -29,7 +28,6 @@ const DisplayUsers = ({usersRetrieved, setUsersRetrieved}) => {
         alert("request sent!")
       }
     } catch (error) {
-      console.log(error)
     }
       }
   return (
@@ -55,17 +53,20 @@ const DisplayUsers = ({usersRetrieved, setUsersRetrieved}) => {
         </tr>
       </thead>} 
     <tbody>
-          {users.map((user) => (
-            <tr className="w-full bg-white border-b dark:bg-gray-900 dark:border-gray-700" key={`${user._id}`}>
-            <td className="px-6 text-center py-4">
+          {users.map((user, i) => (
+            <tr className="w-full border-b bg-gray-900 border-gray-700" key={i}>
+            <td className="px-6 text-white text-center py-4">
               {user.username}
             </td>
-            <td className="px-6 text-center py-4">
+            <td className="px-6 text-white text-center py-4">
               {user.age}
             </td>
-            <td className="px-6 py-4 text-center">
+            
+              <td className="px-6 py-4 text-center">
+              <Link className='text-blue-500 underline' href={`/profile/${user._id}`}>
                 View all {user.languagesLearning.length}              
-            </td>
+                </Link>
+              </td>
             <td className="px-6 py-4 text-center">
               <button onClick={() => send_request(user._id)} className='p-2 font-medium rounded-md' style={{color: "rgb(85,94,63)", backgroundColor: "rgb(222,247,236)"}}>
               Request

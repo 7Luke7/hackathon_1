@@ -20,6 +20,7 @@ const dashboard_controller = (req, res, next) => {
                 })
             }
 
+            console.log(decoded)
             const user = await UserModel.findById(decoded.id)
             
             const {password, ...rest} = user._doc
