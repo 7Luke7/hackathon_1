@@ -1,6 +1,8 @@
-import axios from 'axios';
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
+import io from 'socket.io-client';
+
+const socket = io.connect("http://localhost:5000") 
 
 const DisplayUsers = ({usersRetrieved, setUsersRetrieved}) => {
     const [users, setUsers] = useState([])
@@ -16,19 +18,12 @@ const DisplayUsers = ({usersRetrieved, setUsersRetrieved}) => {
 
       const send_request = async (id) => {
         const token = localStorage.getItem("accessToken")
-        try {
-        const request = await axios.post(`${process.env.URL}/send_connection`, {receiverId: id}, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-        }
-      })
 
-      if (request.status === 200) {
-        alert("request sent!")
-      }
-    } catch (error) {
-    }
+        socket.emit("send-friend-request", {
+          recipient: id,
+          token
+        })
+
       }
   return (
     <div className='w-full h-full'>

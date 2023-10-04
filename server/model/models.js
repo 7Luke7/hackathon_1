@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const languageSchema = new mongoose.Schema({
   language: String,
   proficiency: String, // "Beginner", "Intermediate", "Fluent"
@@ -12,6 +13,10 @@ const userSchema = new mongoose.Schema({
   languagesLearning: [languageSchema],
   bio: String,
   gender: String,
+  friends: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "FriendRequest"
+  }],
   interests: [String], 
   age: Number,
 }, {

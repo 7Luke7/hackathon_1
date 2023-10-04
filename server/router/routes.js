@@ -10,6 +10,7 @@ const sign_in_controller = require("../controllers/sign_in_controller")
 const sign_up_controller = require("../controllers/sign_up_controller")
 const accept_connection = require("../controllers/accept_connection")
 const delete_connection = require("../controllers/delete_connection")
+const get_friends = require("../controllers/get_friends")
 // User Authentication 
 
 router.route("/sign-up").post(sign_up_controller)
@@ -23,5 +24,6 @@ router.route("/send_connection").post(send_connection)
 router.route("/get_connections").get(get_connections)
 router.route("/accept_connection/:id").put(accept_connection)
 router.route("/delete_connection/:id").delete(delete_connection)
+router.route("/get_friends").get(get_friends)
 
 module.exports = router

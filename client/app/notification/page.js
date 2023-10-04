@@ -12,7 +12,6 @@ const Page = () => {
   const [time, setTime] = useState("")
   const [loading, setLoading] = useState(false)
   const [reacted, setReacted] = useState(false)
-  
   const Router = useRouter()
 
   const token = localStorage.getItem("accessToken")

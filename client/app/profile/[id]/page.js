@@ -30,7 +30,6 @@ const Page = ({params}) => {
         }
         })
 
-        console.log(request.data)
         setUser(request.data)
         } catch (error) {
             console.log(error)
