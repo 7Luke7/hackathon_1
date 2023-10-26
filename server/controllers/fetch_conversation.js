@@ -1,8 +1,8 @@
 require("dotenv").config()
+const Conversation = require("../model/Conversation")
 const jwt = require("jsonwebtoken")
-const UserModel = require("../model/models")
 
-const delete_connection = async (req, res, next) => {
+const conversation = async (req, res) => {
     try {
         const auth_headers = req.headers.authorization
         const token = auth_headers.split(" ")[1]
@@ -14,18 +14,17 @@ const delete_connection = async (req, res, next) => {
         }
 
         jwt.verify(token, process.env.TOKEN_KEY, async (err, decoded) => {
-
-            const delete_for_one = await UserModel.findByIdAndUpdate(decoded.id, {$pull: {friends: req.params.id}})  
-            const delete_for_two = await UserModel.findByIdAndUpdate(req.params.id, {$pull: {friends: decoded.id}})  
-
-            res.status(200).json({
-                removed: true
-            })
+            
+            console.log(req.params.id)
+            console.log(decoded.id)
+            const messages = await Conversation.findById(req.params.id).populate("messages").exec()
+            
+              console.log(messages)
+            res.status(200).json({message: messages})  
         })
-        
     } catch (error) {
         console.log(error)
     }
 }
 
-module.exports = delete_connection
+module.exports = conversation

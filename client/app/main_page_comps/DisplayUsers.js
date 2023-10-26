@@ -1,30 +1,19 @@
 import Link from 'next/link'
 import React, { useEffect, useState } from 'react'
-import io from 'socket.io-client';
-
-const socket = io.connect("http://localhost:5000") 
 
 const DisplayUsers = ({usersRetrieved, setUsersRetrieved}) => {
     const [users, setUsers] = useState([])
   
     useEffect(() => {
         setUsers([])
-        const storedArray = localStorage.getItem('userArray');
+        const storedArray = sessionStorage.getItem('userArray');
         if (storedArray) {
             setUsers(JSON.parse(storedArray));
         }
         setUsersRetrieved(false)
-      }, [usersRetrieved]);
+      }, [usersRetrieved, setUsersRetrieved]);
 
-      const send_request = async (id) => {
-        const token = localStorage.getItem("accessToken")
-
-        socket.emit("send-friend-request", {
-          recipient: id,
-          token
-        })
-
-      }
+      
   return (
     <div className='w-full h-full'>
   <table className='w-full'>
@@ -38,9 +27,6 @@ const DisplayUsers = ({usersRetrieved, setUsersRetrieved}) => {
           </th>
           <th scope="col" className="px-3 py-3">
             Language
-          </th>
-          <th scope="col" className="px-3 py-3">
-            Connect
           </th>
           <th scope="col" className="px-3 py-3">
             Profile
@@ -62,11 +48,6 @@ const DisplayUsers = ({usersRetrieved, setUsersRetrieved}) => {
                 View all {user.languagesLearning.length}              
                 </Link>
               </td>
-            <td className="px-6 py-4 text-center">
-              <button onClick={() => send_request(user._id)} className='p-2 font-medium rounded-md' style={{color: "rgb(85,94,63)", backgroundColor: "rgb(222,247,236)"}}>
-              Request
-              </button>
-            </td>
             <td className="px-6 py-4 text-center">
               <Link href={`profile/${user._id}`} className='p-2 font-medium rounded-md' style={{color: "rgb(31,79,192)", backgroundColor: "rgb(219,234,254)"}}>
                 View

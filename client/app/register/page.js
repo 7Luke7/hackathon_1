@@ -1,19 +1,28 @@
 "use client"
 
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import Link from 'next/link'
 import Image from "next/image" 
 import Banner from "../../public/undraw_chat_re_re1u.webp"
 import axios from "axios"
 import { useRouter } from 'next/navigation';
 
-const Page = React.memo(() => {
+const Page = () => {
     const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [date, setDate] = useState("")
     const [gender, setGender] = useState("")
     const [email, setEmail] = useState("")
     const [error, setError] = useState("")
+
+    useEffect(() => {
+    const cookieToken = document.cookie.split("; ").find((row) => row.startsWith("accessToken"))?.split("=")[1]
+    if (cookieToken) {
+      document.cookie = `accessToken=${cookieToken}; SameSite=lax; Secure; max-age=0`;
+    } else {  
+      sessionStorage.removeItem("accessToken")
+    }
+  })
 
       const Router = useRouter()
       const submit_handler = async (e) => {
@@ -45,7 +54,7 @@ const Page = React.memo(() => {
             }
             const request = await axios({
                 method: "POST",
-                url: "https://hckth1.onrender.com/api/v1//sign-up",
+                url: `${process.env.URL}/sign-up`,
                 headers: {
                     'Content-Type': 'application/json'
                 },
@@ -185,6 +194,6 @@ const Page = React.memo(() => {
             </div>
         </div>
       )
-})
+}
 
 export default Page

@@ -1,12 +1,3 @@
-
-
-/*
-    Match beginner with everyone
-    Match Intermediate with Intermediate and Fluent
-    Match Fluent with everyone
-*/
-
-
 const pipeline_handler = (res, data, user) => {
   try {
     const userInterests = user.interests;
@@ -17,6 +8,13 @@ const pipeline_handler = (res, data, user) => {
       })
     }  else {
       pipeline.push(
+        {
+          $match: {
+            $expr: {
+              $ne: ["$_id", user._id]
+            }
+          }
+        },
         {
                         $addFields: {
                           commonInterests: {
@@ -49,13 +47,12 @@ const pipeline_handler = (res, data, user) => {
                           $expr: {
                             $and: [
                               { $gte: [ { $size: { $ifNull: ["$commonInterests", []] } }, 1 ] },
-              { $gte: [ { $size: { $ifNull: ["$commonLanguages", []] } }, 1 ] }
+                              { $gte: [ { $size: { $ifNull: ["$commonLanguages", []] } }, 1 ] }
                             ]
                           },
                           "languagesLearning.proficiency": {
                             $in: ["Beginner", "Intermediate", "Fluent"],
                           },
-                          age: { $gte: 18 },
                         },
                       },
                       {

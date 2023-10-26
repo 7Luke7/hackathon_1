@@ -14,7 +14,7 @@ const get_connections = async (req, res, next) => {
 
         jwt.verify(token, process.env.TOKEN_KEY, async (err, decoded) => {
 
-            const connection = await FriendRequest.find({recipient: decoded.id})
+            const connection = await FriendRequest.find({recipient: decoded.id}).populate("sender").exec()
 
             res.status(200).json(connection)
 

@@ -1,10 +1,10 @@
 "use client"
-import React, { useEffect, useState } from 'react'
+import  { useEffect, useState } from 'react'
 import Header from '../main_page_comps/Header'
 import Link from 'next/link'
-import { BsPerson } from 'react-icons/bs'
-  import { useRouter } from 'next/navigation'
-  import axios from 'axios'
+import { useRouter } from 'next/navigation'
+import axios from 'axios'
+import { check_access_token } from '../check_token'
 
   const Page = () => {
       const [user, setUser] = useState([])
@@ -12,54 +12,45 @@ import { BsPerson } from 'react-icons/bs'
 
       const Router = useRouter()
       useEffect(() => {
-        const token = localStorage.getItem("accessToken")
-      if (!token) {
-        Router.replace("/new_user")
-      } else {
-        setLoading(true)
-      }
-      }, [])
+        check_access_token(setLoading, Router)
+        get_user_data()
+      }, [loading, Router])
   
       const get_user_data = async () => {
-        const token = localStorage.getItem("accessToken")
-
           try {
-              const request = await axios.get(`${process.env.URL}/dashboard`, {
-          headers: {
-              Authorization: `Bearer ${token}`,
-              "Content-Type": "application/json"
-          }
-          })
+            let token = document.cookie.split("; ").find((row) => row.startsWith("accessToken"))?.split("=")[1] || sessionStorage.getItem("accessToken")
+
+            const request = await axios.get(`${process.env.URL}/dashboard`, {
+              
+              headers: {
+                Authorization: `Bearer ${token}`,
+                "Content-Type": "application/json"
+              }
+            });
 
           setUser(request.data)
           } catch (error) {
               console.log(error)
           }
       }
-      
-      useEffect(() => {
-        if (loading) {
-          get_user_data()
-        } else {
-          return
-        }
-      }, [loading])
 
       const handle_account_delete = async () => {
-        const token = localStorage.getItem("accessToken")
         try {
           const request = await axios.delete(`${process.env.URL}/delete_account`, {
-      headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json"
-      }
-      })
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json"
+          }
+        })
 
-      localStorage.removeItem("accessToken")
       useRouter.replace("/login")
       } catch (error) {
           console.log(error)
       }
+      }
+
+      const handler_log_out = () => {        
+        Router.replace("/login")
       }
   return<>
      {loading && <div style={{height: "80vh"}}>
@@ -67,7 +58,9 @@ import { BsPerson } from 'react-icons/bs'
   <div className="flex flex-col h-full justify-center items-center">
     <div className="block max-w-[50rem] rounded-lg border border-neutral-200 bg-white shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]">
       <div className="border-b-2 flex flex-col items-center border-[#0000002d] px-6 py-3 text-neutral-600">
-        <BsPerson color="rgb(55 65 81)" size={31}></BsPerson>
+      <svg xmlns="http://www.w3.org/2000/svg" width={24} height={24} viewBox="0 0 448 512">
+          <path d="M304 128a80 80 0 1 0 -160 0 80 80 0 1 0 160 0zM96 128a128 128 0 1 1 256 0A128 128 0 1 1 96 128zM49.3 464H398.7c-8.9-63.3-63.3-112-129-112H178.3c-65.7 0-120.1 48.7-129 112zM0 482.3C0 383.8 79.8 304 178.3 304h91.4C368.2 304 448 383.8 448 482.3c0 16.4-13.3 29.7-29.7 29.7H29.7C13.3 512 0 498.7 0 482.3z"/>
+      </svg>
             <h1>
             {user.username}
             </h1>
@@ -103,6 +96,9 @@ import { BsPerson } from 'react-icons/bs'
       </div>
     </div>
     
+    <button onClick={handler_log_out} type="button" className="focus:outline-none mt-10 text-white bg-red-700 hover:bg-red-800 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">
+      Log out
+      </button>
 
     <div className='flex justify-evenly'>
 
@@ -150,11 +146,11 @@ import { BsPerson } from 'react-icons/bs'
 
     <div className='flex items-center justify-center'>
     <Link href="/setup">
-    <button type="button" className="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800">
+    <button type="button" className="text-white bg-blue-800 hover:bg-blue-900 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">
           Edit Account
     </button>
     </Link>
-    <button onClick={handle_account_delete} type="button" className="focus:outline-none text-white bg-red-700 hover:bg-red-800 focus:ring-4 focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-red-600 dark:hover:bg-red-700 dark:focus:ring-red-900">
+    <button onClick={handle_account_delete} type="button" className="focus:outline-none text-white bg-red-800 hover:bg-red-900 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 mb-2">
         Delete Account
       </button>
     </div>

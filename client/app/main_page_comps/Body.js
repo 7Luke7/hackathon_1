@@ -11,7 +11,7 @@ const Body = () => {
     const [usersRetrieved, setUsersRetrieved] = useState(false)
     
     useEffect(() => {
-        const languages = localStorage.getItem("selectedLanguages")
+        const languages = sessionStorage.getItem("selectedLanguages")
         if (languages) {
             setSelectedLanguages(JSON.parse(languages))
         } else {
@@ -21,14 +21,14 @@ const Body = () => {
 
     const languagesHandler = (e) => {
         setSelectedLanguages(e)
-        if (!e.length || e.length < JSON.parse(localStorage.getItem("selectedLanguages"))) {
-            localStorage.removeItem("selectedLanguages")
+        if (!e.length || e.length < JSON.parse(sessionStorage.getItem("selectedLanguages"))) {
+            sessionStorage.removeItem("selectedLanguages")
         }
     }
     const find_match_handler = async (e) => {
         try {
             e.preventDefault()
-            const token = localStorage.getItem("accessToken")
+            let token = document.cookie.split("; ").find((row) => row.startsWith("accessToken"))?.split("=")[1] || sessionStorage.getItem("accessToken")
             const request = await axios({
                 method: "POST", 
                 url: `${process.env.URL}/pair_user`,
@@ -39,12 +39,12 @@ const Body = () => {
                 },
             })
 
-            localStorage.setItem("userArray", JSON.stringify(request.data))
-            localStorage.setItem("selectedLanguages", JSON.stringify(selectedLanguages))
+            sessionStorage.setItem("userArray", JSON.stringify(request.data))
+            sessionStorage.setItem("selectedLanguages", JSON.stringify(selectedLanguages))
             setUsersRetrieved(true)
         } catch (error) {
             if (error.response.status === 400) {
-                localStorage.removeItem("userArray")
+                sessionStorage.removeItem("userArray")
                 setUsersRetrieved(true)
                 setError("")
                 setError(error.response.data.message)

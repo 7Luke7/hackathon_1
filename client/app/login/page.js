@@ -1,6 +1,6 @@
 "use client"
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import Link from 'next/link'
 import Image from "next/image"
 import Banner from "../../public/undraw_chatting_re_j55r.webp"
@@ -11,6 +11,16 @@ const Page = () => {
   const [email, setEmail] = useState("")
   const [password, setPasswrod] = useState("")
   const [error, setError] = useState("")
+  const [keepLogged, setKeepLogged] = useState(false)
+
+  useEffect(() => {
+    const cookieToken = document.cookie.split("; ").find((row) => row.startsWith("accessToken"))?.split("=")[1]
+    if (cookieToken) {
+      document.cookie = `accessToken=${cookieToken}; SameSite=lax; Secure; max-age=0`;
+    } else {  
+      sessionStorage.clear()
+    }
+  })
 
   const Router = useRouter()
     const submit_handler = async (e) => {
@@ -30,7 +40,13 @@ const Page = () => {
       })
 
       if (request.status === 200) {
-          localStorage.setItem("accessToken", request.data.token)
+          const three_day = 24 * 60 * 60 * 3
+          if (keepLogged) {
+            document.cookie = `accessToken=${request.data.token}; SameSite=lax; Secure; max-age=${three_day};`;
+          } else {
+            sessionStorage.setItem("accessToken", request.data.token)
+          }
+
           Router.push("/setup")
       }
       } catch (error) {
@@ -44,6 +60,10 @@ const Page = () => {
           }
         console.error(error) 
       }
+    }
+
+    const handleCheckbox = (e) => {
+      setKeepLogged(e.target.value)
     }
     
   return (
@@ -96,6 +116,10 @@ const Page = () => {
               </div>
             </div>
 
+            <div className='flex items-center gap-1'>
+            <label className='text-xs font-light'>Stay logged in:</label>
+            <input type="checkbox" value={keepLogged} onChange={(e) => handleCheckbox(e)}></input>
+            </div>
             <div>
             <span className='text-sm font-semibold text-red-600'>{error}</span>
               <button
@@ -116,7 +140,7 @@ const Page = () => {
         </div>
       </div>
       <div className='container w-6/12'>
-            <Image priority src={Banner} alt="Banner"></Image>
+            <Image loading='lazy' src={Banner} alt="Banner"></Image>
         </div>
         </div>
     </div>

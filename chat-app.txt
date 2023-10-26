@@ -1,0 +1,107 @@
+-- Is friends with --
+
+ 1. We have the both viewer ID and viewed users ID
+ 2. We want to check if viewer is friend with the other user.
+ 
+    --  If they are friends --
+    
+    1. We will conditionally output the button for deleting the connection	
+    
+
+I just checked the page bundle size its crazy high now uninstalling packages and vanilla writing everything all again xD 
+
+   -- Set up --
+     --- langauge choosing ---
+     	1.we want a select form where the user will select the languages and its porficiency
+     	
+     	- If user hasn't selected both proficiency and langauges it wont be able to add another language
+     	
+     	
+     --- Adding hobbies ---
+     
+     	1. I want to allow users to add hobbies
+     	
+     	   -- features --
+     	   
+     	   1. selecting multiple hobbies.
+     	   2. deleting hobbies all at once.
+     	   3. deleting hobbies one by one
+     	   
+     	   
+	 It litteraly had 1.3MB on just 1 page + 1.4mb for main.js
+ 	-- considering 1mb download on 3G internet is 5 seconds of waiting it would round up to 10-15 seconds of waiting lol.
+ 		
+
+Quickly I want to add keep me logged in funcionallity 
+
+	Basically how I imagine it is that Sessions and cookies will be used.
+		
+		So whenever users get to login page they will have checkbox input to check or leave it blank.
+		
+		case "user checks":
+			if user checks the input we will store token coming from server to cookies and set expiry time of 3 days
+		case: "user didn't check":
+			if user didn't check the input we will store token to sessionStorage
+			
+	
+	How we would check if User is logged in thats easy question but still cover it.
+	
+		Small Harsh Info:
+		
+		So sessionStorage gets cleared wiped out nothing stays in sessionStorage after you(user) leave the page.
+		while Cookies stay as long as browser e.g (Google, Firfox) is not closed or by setting your own expiry time meaning you decide when you want to delete the cookie.
+		
+		
+		
+		Logic:
+		
+			What happens when user lands on Home page
+			
+			  1.  We will use useEffect hook to verify if user has a access token in session or cookies
+			  2.  If user has access token in session storage we will make modification to session storage if its cookies we would modify cookies
+			  
+		
+		
+
+ -- language options -- 
+	
+	So lets think about how will it function
+	
+		-- What you can do
+		1. Obviously we want to be able to "select" the langauges.
+		2. Be able to "Search" 
+		3. Having language associated with Proficiency
+		4. Being able to add new Languages field
+		
+		-- What you can't do
+		5. Cant add more languages if current language field isn't filled
+		6. Can't add more fields than all languages combined	
+		
+		We will need to update this thru code.
+		Now I am gonna use "cat" command to watch what I have written here along coding.
+
+
+--Chatting system--
+
+	
+	-- sockets
+	
+	whenever user sends the message we will send 
+
+	-- saving messages to database
+	
+	lets say X sends message to Y
+	In database we will save sender as X.id and receiver as Y.id -- we have model containing user who sent and reciever with the content that has been sent.
+	
+	Let's say X wants to see the chats with Y
+	he clicks the user on sidebar sidebar makes get request to server sending id of Y user we would query for the messages that they have sent to each other with 
+	
+	MessageModel.find({queries}) and this is gonna give us all the messages that contain both Y an X user ids with its contents and the exact time it was sent.
+	
+
+	
+		
+-- FIXES TO BE DONE --
+There are 2 conversation ids take a look at that
+Socket may not be disconnecting
+password leak in findMatch functionallity

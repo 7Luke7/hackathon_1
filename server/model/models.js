@@ -7,6 +7,10 @@ const languageSchema = new mongoose.Schema({
 
 const userSchema = new mongoose.Schema({
   username: {type: String, unique: true, required: true},
+  conversation: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Conversation"
+  }],
   email: { type: String, unique: true, required: true },
   password: {type: String, required: true},
   nativeLanguage: String, 
@@ -15,7 +19,15 @@ const userSchema = new mongoose.Schema({
   gender: String,
   friends: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: "FriendRequest"
+    ref: "User"
+  }],
+  outgoingFriendRequests: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
+  }],
+  incomingFriendRequests: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User"
   }],
   interests: [String], 
   age: Number,
@@ -49,4 +61,4 @@ userSchema.index(
 
 const UserModel = mongoose.model('User', userSchema);
 
-module.exports = UserModel;
+module.exports = UserModel; 
