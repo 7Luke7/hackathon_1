@@ -3,9 +3,9 @@ import React, { useEffect, useState } from 'react'
 
 const DisplayUsers = ({usersRetrieved, setUsersRetrieved}) => {
     const [users, setUsers] = useState([])
-  
-    useEffect(() => {
-        setUsers([])
+      
+    useEffect(() => {      
+        setUsers([])  
         const storedArray = sessionStorage.getItem('userArray');
         if (storedArray) {
             setUsers(JSON.parse(storedArray));
@@ -13,9 +13,8 @@ const DisplayUsers = ({usersRetrieved, setUsersRetrieved}) => {
         setUsersRetrieved(false)
       }, [usersRetrieved, setUsersRetrieved]);
 
-      
   return (
-    <div className='w-full h-full'>
+    <div>
   <table className='w-full'>
       {users.length > 0 && <thead className="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
         <tr>
@@ -35,7 +34,7 @@ const DisplayUsers = ({usersRetrieved, setUsersRetrieved}) => {
       </thead>} 
     <tbody>
           {users.map((user, i) => (
-            <tr className="w-full border-b bg-gray-900 border-gray-700" key={i}>
+            <tr className="border-b bg-gray-900 border-gray-700" key={i}>
             <td className="px-6 text-white text-center py-4">
               {user.username}
             </td>
@@ -55,11 +54,10 @@ const DisplayUsers = ({usersRetrieved, setUsersRetrieved}) => {
             </td>
           </tr>
           ))}
+          
     </tbody>
   </table>
-</div>
-  
-
+ </div>  
   )
 }
 

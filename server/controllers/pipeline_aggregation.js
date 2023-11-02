@@ -56,7 +56,7 @@ const pipeline_handler = (res, data, user) => {
                         },
                       },
                       {
-                        $limit: 10,
+                        $limit: 5,
                       },
       
       )

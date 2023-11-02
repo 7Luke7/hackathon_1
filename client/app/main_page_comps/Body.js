@@ -9,7 +9,7 @@ const Body = () => {
     const [selectedLanguages, setSelectedLanguages] = useState([])
     const [error, setError] = useState("")
     const [usersRetrieved, setUsersRetrieved] = useState(false)
-    
+
     useEffect(() => {
         const languages = sessionStorage.getItem("selectedLanguages")
         if (languages) {
@@ -43,6 +43,7 @@ const Body = () => {
             sessionStorage.setItem("selectedLanguages", JSON.stringify(selectedLanguages))
             setUsersRetrieved(true)
         } catch (error) {
+            console.log(error)
             if (error.response.status === 400) {
                 sessionStorage.removeItem("userArray")
                 setUsersRetrieved(true)
@@ -75,7 +76,7 @@ const Body = () => {
               classNamePrefix="select"
             />
             <button type='submit' className='bg-amber-500 px-7 py-2 text-slate-100 font-bold'>
-                Find a Match
+                Find Matches    
             </button>
         </form>
         <span className="text-sm font-semibold text-red-600">{error}</span>
