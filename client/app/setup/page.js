@@ -128,7 +128,7 @@ const Page = () => {
 
   useEffect(() => {
     get_user_data();
-  }, [get_user_data]);
+  }, []);
   return (
     <div>
       <div className="text-center mt-20">
