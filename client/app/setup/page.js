@@ -32,7 +32,7 @@ const Page = () => {
   
   const get_user_data = async () => {
     try {
-      const token = document.cookie.split("; ").find((row) => row.startsWith("accessToken"))?.split("=")[1] || sessionStorage.getItem("accessToken")
+      const token = localStorage.getItem("accessToken");
       const request = await axios.get(
         `${process.env.URL}/dashboard`,
         {
@@ -77,8 +77,7 @@ const Page = () => {
         return
       }
 
-      const token = document.cookie.split("; ").find((row) => row.startsWith("accessToken"))?.split("=")[1] || sessionStorage.getItem("accessToken")
-      console.log(token)
+      const token = localStorage.getItem("accessToken")
       const request = await axios.put(`${process.env.URL}/setup_profile`, user, {
         headers: {
         Authorization: `Bearer ${token}`,
@@ -125,11 +124,11 @@ const Page = () => {
     setTimeout(() => {
       setError("")
     }, 5000)
-  }, [user, error]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [user, error]);
 
   useEffect(() => {
     get_user_data();
-  }, [get_user_data]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [get_user_data]);
   return (
     <div>
       <div className="text-center mt-20">
