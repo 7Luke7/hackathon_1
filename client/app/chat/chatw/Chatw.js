@@ -32,7 +32,7 @@ const ChatWindow = ({update, currentUser, setUpdate}) => {
         }
 
         get_chat()
-    }, [currentUser, update])
+    }, [currentUser]) // eslint-disable-line react-hooks/exhaustive-deps
 
     const send_message = (e) => {
         e.preventDefault()
