@@ -16,7 +16,6 @@ const conversation = async (req, res) => {
         jwt.verify(token, process.env.TOKEN_KEY, async (err, decoded) => {
             const messages = await Conversation.findById(req.params.id).populate("messages").exec()
             
-              console.log(messages)
             res.status(200).json({message: messages})  
         })
     } catch (error) {

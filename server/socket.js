@@ -13,17 +13,18 @@ app.use(cors())
 const server = http.createServer(app)
 const io = new socketIo.Server(server, {
     cors: {
-        options: "http://localhost:3000",
+        origin: "http://localhost:3000",
         methods: ["GET", "POST"]
     }
 })
 
 io.on("connection", (socket) => {
-        
+            
 
         socket.on("sendMessage", async (data) => {
             const parsedObject = JSON.parse(data)
 
+            console.log(data)
 
                 jwt.verify(parsedObject.token, process.env.TOKEN_KEY, async (err, decoded) => {
                     const new_message = await new Message({

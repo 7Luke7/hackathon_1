@@ -1,29 +1,29 @@
 [
-  {
-    "id": "1",
-    "value": "3D printing",
-    "label": "3D printing"
-  },
-  {
-    "id": "2",
-    "value": "amateur radio",
-    "label": "amateur radio"
-  },
-  {
-    "id": "3",
-    "value": "Scrapbook",
-    "label": "Scrapbook"
-  },
-  {
-    "id": "4",
-    "value": "Amateur radio",
-    "label": "Amateur radio"
-  },
-  {
-    "id": "5",
-    "value": "Acting",
-    "label": "Acting"
-  },
+    {
+      "id": "1",
+      "value": "3D printing",
+      "label": "3D printing"
+    },
+    {
+      "id": "2",
+      "value": "amateur radio",
+      "label": "amateur radio"
+    },
+    {
+      "id": "3",
+      "value": "Scrapbook",
+      "label": "Scrapbook"
+    },
+    {
+      "id": "4",
+      "value": "Amateur radio",
+      "label": "Amateur radio"
+    },
+    {
+      "id": "5",
+      "value": "Acting",
+      "label": "Acting"
+    },
   {
     "id": "6",
     "value": "Baton twirling",

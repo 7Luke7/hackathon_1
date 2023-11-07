@@ -1,12 +1,11 @@
 "use client"
-import React, { useContext, useEffect, useState } from 'react'
-import SocketContext  from '../../socket'
+import React, { useEffect, useState } from 'react'
 import axios from 'axios'
+import socket from "../../socket"
 
 const ChatWindow = ({update, currentUser, setUpdate}) => {
     const [messageInput, setMessageInput] = useState("")
     const [conversation, setConversation] = useState([])
-    const socket = useContext(SocketContext);
 
     useEffect(() => {
         const token = document.cookie.split("; ").find((row) => row.startsWith("accessToken"))?.split("=")[1] || sessionStorage.getItem("accessToken")
@@ -37,7 +36,9 @@ const ChatWindow = ({update, currentUser, setUpdate}) => {
     const send_message = (e) => {
         e.preventDefault()
         const token = document.cookie.split("; ").find((row) => row.startsWith("accessToken"))?.split("=")[1] || sessionStorage.getItem("accessToken")
-
+        
+        console.log(messageInput, token, conversation._id)
+        console.log(socket)
         socket.emit("sendMessage", JSON.stringify({message: messageInput, token: token, conversation_id: conversation._id, user_id: !currentUser.userId ? JSON.parse(sessionStorage.getItem("ucw")).userId : currentUser.userId}))
 
         setMessageInput("")        
@@ -108,10 +109,10 @@ const ChatWindow = ({update, currentUser, setUpdate}) => {
 <form onSubmit={send_message} className='gap-4 w-[95%] flex'>
         <input value={messageInput} onChange={(e) => setMessageInput(e.target.value)} className="w-full woutline-none border rounded px-2 py-2" type="text"/>
         <button type='submit'>
-        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#263238" className="cursor-pointer" viewBox="0 0 16 16">
-            <path fillRule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
-            <path fillRule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
-        </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="#263238" className="cursor-pointer" viewBox="0 0 16 16">
+                <path fillRule="evenodd" d="M3.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L9.293 8 3.646 2.354a.5.5 0 0 1 0-.708z"/>
+                <path fillRule="evenodd" d="M7.646 1.646a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 0 .708l-6 6a.5.5 0 0 1-.708-.708L13.293 8 7.646 2.354a.5.5 0 0 1 0-.708z"/>
+            </svg>
         </button>
 </form>
 </div>

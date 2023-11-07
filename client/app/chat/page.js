@@ -4,14 +4,12 @@ import { cloneElement, useEffect, useState } from 'react'
 import axios from 'axios'
 import Sidebar from './sidebar/Sidebar'
 import ChatWindow from './chatw/Chatw'
-import { io } from 'socket.io-client'
-import SocketContext from '../socket'
 import Link from 'next/link'
+import { CONFIG_FILES } from 'next/dist/shared/lib/constants'
 
 const Page = () => {
     const [friends, setFriends] = useState([])
     const [update, setUpdate] = useState(false)
-    const [socket, setSocket] = useState(null);
 
     const [currentUser, setCurrentUser] = useState({
             userId: "",
@@ -22,15 +20,16 @@ const Page = () => {
         useEffect(() => {
             const user = sessionStorage.getItem("ucw")
             
-            console.log(user)
             const get_friends = async () => {
                 try {
                     const token = document.cookie.split("; ").find((row) => row.startsWith("accessToken"))?.split("=")[1] || sessionStorage.getItem("accessToken")
 
-                    const request = await axios.get(`${process.env.URL}/get_friends`, {
-                        headers: {
-                            "Content-Type": "application/json",
-                            Authorization: `Bearer ${token}`
+                    const request = await axios({
+                        "url": `${process.env.URL}/get_friends`,
+                        "method": "GET",
+                        "headers": {
+                            'Authorization': `Bearer ${token}`,
+                            "Content-Type": "application/json"
                         }
                     })
                     
@@ -52,8 +51,6 @@ const Page = () => {
                     conversationId: user.conversationId
                 }
             })
-            const newSocket = io();
-            setSocket(newSocket);
     }, [])
     
     const save_user_to_session = async (user) => {
@@ -69,8 +66,7 @@ const Page = () => {
     }
 
     console.log(friends)
-    return <SocketContext.Provider value={socket}>
-        <FriendsContext.Provider value={friends}>
+    return <FriendsContext.Provider value={friends}>
         <div className="w-full h-32" style={{backgroundColor: "#449388"}}>
         <div className='pl-16 pt-12'>
             <Link href="/">
@@ -89,7 +85,6 @@ const Page = () => {
             </div>
         </div>
     </FriendsContext.Provider>
-    </SocketContext.Provider>
 }
 
 export default Page

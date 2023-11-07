@@ -16,13 +16,6 @@ const get_friends = async (req, res, next) => {
       jwt.verify(token, process.env.TOKEN_KEY, async (err, decoded) => {
         const friends = await UserModel.findById(decoded.id).populate('friends').exec()
 
-
-        friends.friends.map((f) => {
-            console.log(f.conversation, "hi")
-        })
-
-        console.log(friends)
-
         const friends_mapped = friends.friends.map((f) => ({
             id: f._id.toString(),
             username: f.username,
