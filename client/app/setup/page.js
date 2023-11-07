@@ -32,7 +32,7 @@ const Page = () => {
   
   const get_user_data = async () => {
     try {
-      const token = localStorage.getItem("accessToken");
+      const token =document.cookie.split("; ").find((row) => row.startsWith("accessToken"))?.split("=")[1] || sessionStorage.getItem("accessToken")
       const request = await axios.get(
         `${process.env.URL}/dashboard`,
         {
@@ -77,7 +77,7 @@ const Page = () => {
         return
       }
 
-      const token = localStorage.getItem("accessToken")
+      const token = document.cookie.split("; ").find((row) => row.startsWith("accessToken"))?.split("=")[1] || sessionStorage.getItem("accessToken")
       const request = await axios.put(`${process.env.URL}/setup_profile`, user, {
         headers: {
         Authorization: `Bearer ${token}`,
