@@ -14,7 +14,7 @@ import { check_access_token } from '../check_token'
       useEffect(() => {
         check_access_token(setLoading, Router)
         get_user_data()
-      }, [loading, Router])
+      }, [loading])
   
       const get_user_data = async () => {
           try {
