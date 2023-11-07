@@ -125,11 +125,11 @@ const Page = () => {
     setTimeout(() => {
       setError("")
     }, 5000)
-  }, [user, error]);
+  }, [user, error]); // eslint-disable-line react-hooks/exhaustive-deps
 
   useEffect(() => {
     get_user_data();
-  }, [get_user_data]);
+  }, [get_user_data]); // eslint-disable-line react-hooks/exhaustive-deps
   return (
     <div>
       <div className="text-center mt-20">
