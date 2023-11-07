@@ -2,6 +2,7 @@
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import socket from "../../socket"
+import Image from 'next/image'
 
 const ChatWindow = ({update, currentUser, setUpdate}) => {
     const [messageInput, setMessageInput] = useState("")
@@ -31,7 +32,7 @@ const ChatWindow = ({update, currentUser, setUpdate}) => {
         }
 
         get_chat()
-    }, [currentUser])
+    }, [currentUser, update])
 
     const send_message = (e) => {
         e.preventDefault()
@@ -49,7 +50,7 @@ const ChatWindow = ({update, currentUser, setUpdate}) => {
 <div className="py-2 px-3 bg-grey-lighter flex flex-row justify-between items-center">
 <div className="flex items-center">
 <div>
-    <img className="w-10 h-10 rounded-full" src="https://darrenjameseeley.files.wordpress.com/2014/09/expendables3.jpeg"/>
+    <Image className="w-10 h-10 rounded-full" alt="some" src="https://darrenjameseeley.files.wordpress.com/2014/09/expendables3.jpeg"/>
 </div>
 <div className="ml-4">
     <p className="text-grey-darkest">
