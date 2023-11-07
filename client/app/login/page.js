@@ -38,6 +38,8 @@ const Page = () => {
           },
           data: JSON.stringify(payload)   
       })
+      
+      
 
       if (request.status === 200) {
           const three_day = 24 * 60 * 60 * 3
