@@ -13,7 +13,7 @@ import {
   DialogFooter,
 } from "@material-tailwind/react"
 
-const page = () => {
+const Page = () => {
   const [user, setUser] = useState({
     username: "",
     gender: "",
@@ -122,10 +122,6 @@ const page = () => {
   };
 
   useEffect(() => {
-    console.log(user)
-  }, [user])
-
-  useEffect(() => {
     setTimeout(() => {
       setError("")
     }, 5000)
@@ -133,7 +129,7 @@ const page = () => {
 
   useEffect(() => {
     get_user_data();
-  }, []);
+  }, [get_user_data]);
   return (
     <div>
       <div className="text-center mt-20">
@@ -330,4 +326,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;
